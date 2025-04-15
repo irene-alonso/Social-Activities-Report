@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Activities Reporting Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles for transitions and appearance */
+        .form-section {
+            transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transition */
+            overflow: hidden;
+            border: 1px solid #e5e7eb; /* Light gray border */
+            border-radius: 0.5rem; /* Rounded corners */
+            margin-bottom: 2rem; /* Space between sections */
+        }
+        .form-section.collapsed {
+            max-height: 60px; /* Height when collapsed (header only) */
+            opacity: 0.9; /* Slightly transparent when collapsed */
+        }
+        .form-section-header {
+            background-color: #f9fafb; /* Very light gray background for headers */
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #e5e7eb; /* Divider line */
+        }
+        .form-section-content {
+            padding: 1.5rem;
+            background-color: #ffffff; /* White background for content */
+        }
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+        .course-row {
+            transition: background-color 0.3s ease;
+        }
+        .course-row:hover {
+            background-color: #f3f4f6; /* Background color on hover */
+        }
+        /* Styles for inputs and selects */
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* Gray border */
+            border-radius: 0.375rem; /* Rounded corners */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb; /* Blue border on focus */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Blue focus ring */
+        }
+        label {
+            display: block;
+            font-size: 0.875rem; /* Small font size */
+            font-weight: 500; /* Medium weight */
+            color: #374151; /* Dark gray color */
+            margin-bottom: 0.25rem;
+        }
+        /* Styles for buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary {
+            background-color: #2563eb; /* Primary blue */
+            color: white;
+            border: 1px solid transparent;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Darker blue on hover */
+        }
+        .btn-secondary {
+            background-color: white;
+            color: #374151; /* Dark gray */
+            border: 1px solid #d1d5db; /* Gray border */
+        }
+        .btn-secondary:hover {
+            background-color: #f9fafb; /* Very light gray on hover */
+        }
+        .btn-add {
+            color: #2563eb; /* Blue */
+        }
+        .btn-add:hover {
+            color: #1d4ed8; /* Dark blue */
+        }
+        .btn-remove {
+            color: #dc2626; /* Red */
+        }
+        .btn-remove:hover {
+            color: #b91c1c; /* Dark red */
+        }
+        /* Hide 'Other' text input/textarea by default */
+        .other-text-input, .activity-description-textarea {
+            display: none; /* Hidden by default */
+            margin-top: 0.5rem; /* Space above the textarea */
+        }
+        .checkbox-item-container {
+            margin-bottom: 0.75rem; /* Space below each checkbox item */
+        }
+        .checkbox-label-line {
+             display: flex;
+             align-items: center;
+        }
+        /* Style for section titles */
+        .section-title {
+            font-size: 1.25rem; /* Larger font size */
+            font-weight: 600; /* Semibold */
+            color: #111827; /* Very dark gray */
+        }
+        .section-icon {
+            margin-right: 0.75rem; /* Space to the right of the icon */
+            font-size: 1.1rem; /* Icon size */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-10 max-w-4xl">
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-5">
+                <h1 class="text-2xl font-bold text-white">Corporate Activities Reporting Form</h1>
+                <p class="text-blue-100 mt-1">Please complete the information about your organization's activities.</p>
+            </div>
+
+            <form id="activitiesForm" class="p-6 space-y-6">
+
+                <div class="bg-white p-6 rounded-lg border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-5 border-b pb-3">Organization Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="entityName">Entity Name*</label>
+                            <select id="entityName" name="entityName" required>
+                                <option value="">Select Entity</option>
+                                <option value="E_5678">E_5678</option>
+                                <option value="E7895">E7895</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="reportingYear">Year*</label>
+                            <input type="number" id="reportingYear" name="reportingYear" min="2000" max="2099" required>
+                        </div>
+                        <div>
+                            <label for="reportingPeriod">Period*</label>
+                            <select id="reportingPeriod" name="reportingPeriod" required>
+                                <option value="">Select period</option>
+                                <option value="1Q">Q1 (Jan-Mar)</option>
+                                <option value="2Q">Q2 (Apr-Jun)</option>
+                                <option value="3Q">Q3 (Jul-Sep)</option>
+                                <option value="4Q">Q4 (Oct-Dec)</option>
+                                <option value="FY">Full Year</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="contactPerson">Contact Person*</label>
+                            <input type="text" id="contactPerson" name="contactPerson" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section collapsed">
+                    <div class="form-section-header" onclick="toggleSection(this)">
+                        <h2 class="section-title">
+                            <i class="fas fa-graduation-cap text-blue-600 section-icon"></i>
+                            Staff Development (Learning & Development)
+                        </h2>
+                        <i class="toggle-icon fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="form-section-content">
+                        <p class="text-sm text-gray-600 mb-4">Provide details of all training and development activities conducted during the reporting period.</p>
+
+                        <div class="overflow-x-auto mb-4">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Name</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration (hours)</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participants</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="courseTableBody" class="bg-white divide-y divide-gray-200">
+                                    <tr class="course-row">
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <select name="courseArea[]" class="text-sm">
+                                                <option value="">Select area</option>
+                                                <option value="Technical">Technical</option>
+                                                <option value="H&S">Health & Safety (H&S)</option>
+                                                <option value="Q&E">Quality & Environment</option>
+                                                <option value="Languages">Languages</option>
+                                                <option value="Ethics">Annual Code of Ethics</option>
+                                                <option value="SoftSkills">Soft Skills</option>
+                                                <option value="On-the-job">On-the-job training</option>
+                                                <option value="Initial_H&S">Initial H&S</option>
+                                                <option value="Initial_Ethics">Initial Code of Ethics</option>
+                                                <option value="Initial_Induction">Initial Corporate Induction</option>
+                                                <option value="Initial_Cybersecurity">Initial Cybersecurity</option>
+                                                <option value="Initial_DataProtection">Initial Data Protection</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <input type="text" name="courseName[]" class="text-sm" placeholder="Specific course name">
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <input type="number" name="courseDuration[]" min="0" step="0.1" class="text-sm" placeholder="e.g., 8">
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap">
+                                            <input type="number" name="courseParticipants[]" min="0" class="text-sm" placeholder="e.g., 15">
+                                        </td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-center">
+                                            <button type="button" onclick="addCourseRow(this)" class="btn-add text-xl">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                         <button type="button" onclick="addCourseRow(document.querySelector('#courseTableBody tr:last-child button'))" class="btn btn-secondary btn-sm mt-2">
+                             <i class="fas fa-plus mr-1"></i> Add Another Course Row
+                         </button>
+
+                        <div class="mt-6">
+                            <label for="staffDevComments">Additional Comments (Staff Development)</label>
+                            <textarea id="staffDevComments" name="staffDevComments" rows="3" placeholder="Add any relevant comments about training activities..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section collapsed">
+                    <div class="form-section-header" onclick="toggleSection(this)">
+                        <h2 class="section-title">
+                            <i class="fas fa-heartbeat text-green-600 section-icon"></i>
+                            Employee Wellbeing
+                        </h2>
+                        <i class="toggle-icon fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                     <div class="form-section-content">
+                        <p class="text-sm text-gray-600 mb-4">Select the activities conducted to support employee mental and physical health and provide a brief description for each selected.</p>
+
+                        <div class="mb-4 space-y-3"> <label class="block text-sm font-medium text-gray-700 mb-2">Wellbeing Activities (check all that apply and describe)</label>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="wellbeing_wellnessPrograms" name="wellbeingActivities[]" value="Wellness programs" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="wellbeing_wellnessPrograms" class="text-sm text-gray-700">Wellness programs</label>
+                                </div>
+                                <textarea name="wellbeing_wellnessPrograms_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the wellness programs..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="wellbeing_mentalHealthSupport" name="wellbeingActivities[]" value="Mental health support" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="wellbeing_mentalHealthSupport" class="text-sm text-gray-700">Mental health support (EAP, workshops)</label>
+                                </div>
+                                <textarea name="wellbeing_mentalHealthSupport_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the mental health support..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                 <div class="checkbox-label-line">
+                                    <input type="checkbox" id="wellbeing_fitnessFacilities" name="wellbeingActivities[]" value="Fitness facilities/subsidies" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="wellbeing_fitnessFacilities" class="text-sm text-gray-700">Fitness facilities/subsidies</label>
+                                </div>
+                                <textarea name="wellbeing_fitnessFacilities_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe fitness facilities/subsidies..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="wellbeing_healthScreenings" name="wellbeingActivities[]" value="Health screenings" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="wellbeing_healthScreenings" class="text-sm text-gray-700">Health screenings / Check-ups</label>
+                                </div>
+                                <textarea name="wellbeing_healthScreenings_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe health screenings..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="wellbeing_flexibleWork" name="wellbeingActivities[]" value="Flexible work arrangements" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="wellbeing_flexibleWork" class="text-sm text-gray-700">Flexible work arrangements (hours, remote)</label>
+                                </div>
+                                <textarea name="wellbeing_flexibleWork_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe flexible work arrangements..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="wellbeing_other" name="wellbeingActivities[]" value="Other" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox other-checkbox">
+                                    <label for="wellbeing_other" class="text-sm text-gray-700 mr-2">Other:</label>
+                                    <input type="text" name="wellbeing_other_name" class="text-sm other-text-input flex-grow" placeholder="Specify other activity">
+                                </div>
+                                <textarea name="wellbeing_other_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the other activity..."></textarea>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="form-section collapsed">
+                    <div class="form-section-header" onclick="toggleSection(this)">
+                        <h2 class="section-title">
+                            <i class="fas fa-users text-purple-600 section-icon"></i>
+                            Diversity & Inclusion
+                        </h2>
+                        <i class="toggle-icon fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="form-section-content">
+                        <p class="text-sm text-gray-600 mb-4">Select the activities conducted to promote diversity and create an inclusive workplace and provide a brief description for each selected.</p>
+
+                         <div class="mb-4 space-y-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Diversity & Inclusion Initiatives (check all that apply and describe)</label>
+
+                             <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="diversity_training" name="diversityInitiatives[]" value="Diversity training" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="diversity_training" class="text-sm text-gray-700">Diversity & inclusion training</label>
+                                </div>
+                                <textarea name="diversity_training_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the D&I training..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="diversity_ergs" name="diversityInitiatives[]" value="Employee resource groups" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="diversity_ergs" class="text-sm text-gray-700">Employee resource groups (ERGs)</label>
+                                </div>
+                                <textarea name="diversity_ergs_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the ERGs..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="diversity_inclusiveRecruitment" name="diversityInitiatives[]" value="Inclusive recruitment practices" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="diversity_inclusiveRecruitment" class="text-sm text-gray-700">Inclusive recruitment practices</label>
+                                </div>
+                                <textarea name="diversity_inclusiveRecruitment_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe inclusive recruitment practices..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="diversity_mentorship" name="diversityInitiatives[]" value="Mentorship programs" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="diversity_mentorship" class="text-sm text-gray-700">Mentorship programs</label>
+                                </div>
+                                <textarea name="diversity_mentorship_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe mentorship programs..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="diversity_accessibility" name="diversityInitiatives[]" value="Accessibility measures" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="diversity_accessibility" class="text-sm text-gray-700">Accessibility measures</label>
+                                </div>
+                                <textarea name="diversity_accessibility_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe accessibility measures..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="diversity_other" name="diversityInitiatives[]" value="Other" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox other-checkbox">
+                                    <label for="diversity_other" class="text-sm text-gray-700 mr-2">Other:</label>
+                                    <input type="text" name="diversity_other_name" class="text-sm other-text-input flex-grow" placeholder="Specify other initiative">
+                                </div>
+                                <textarea name="diversity_other_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the other initiative..."></textarea>
+                            </div>
+                        </div>
+                         </div>
+                </div>
+
+                <div class="form-section collapsed">
+                    <div class="form-section-header" onclick="toggleSection(this)">
+                        <h2 class="section-title">
+                            <i class="fas fa-hands-helping text-yellow-600 section-icon"></i>
+                            Supporting Local Communities
+                        </h2>
+                        <i class="toggle-icon fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="form-section-content">
+                        <p class="text-sm text-gray-600 mb-4">Select the activities conducted to support local communities and provide a brief description for each selected.</p>
+
+                        <div class="mb-4 space-y-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Community Support Activities (check all that apply and describe)</label>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="community_volunteering" name="communityActivities[]" value="Employee volunteering" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="community_volunteering" class="text-sm text-gray-700">Employee volunteering</label>
+                                </div>
+                                <textarea name="community_volunteering_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe employee volunteering..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="community_donations" name="communityActivities[]" value="Charitable donations" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="community_donations" class="text-sm text-gray-700">Charitable donations (monetary or in-kind)</label>
+                                </div>
+                                <textarea name="community_donations_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe charitable donations..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="community_sponsorships" name="communityActivities[]" value="Sponsorships" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="community_sponsorships" class="text-sm text-gray-700">Sponsorships (local events, teams)</label>
+                                </div>
+                                <textarea name="community_sponsorships_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe sponsorships..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="community_educational" name="communityActivities[]" value="Educational programs" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="community_educational" class="text-sm text-gray-700">Local educational programs</label>
+                                </div>
+                                <textarea name="community_educational_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe educational programs..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="community_environmental" name="communityActivities[]" value="Environmental initiatives" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox">
+                                    <label for="community_environmental" class="text-sm text-gray-700">Local environmental initiatives</label>
+                                </div>
+                                <textarea name="community_environmental_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe environmental initiatives..."></textarea>
+                            </div>
+
+                            <div class="checkbox-item-container">
+                                <div class="checkbox-label-line">
+                                    <input type="checkbox" id="community_other" name="communityActivities[]" value="Other" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-2 activity-checkbox other-checkbox">
+                                    <label for="community_other" class="text-sm text-gray-700 mr-2">Other:</label>
+                                    <input type="text" name="community_other_name" class="text-sm other-text-input flex-grow" placeholder="Specify other activity">
+                                </div>
+                                <textarea name="community_other_desc" rows="2" class="activity-description-textarea w-full text-sm" placeholder="Describe the other activity..."></textarea>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg border border-gray-200">
+                     <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Additional General Comments</h2>
+                     <label for="additionalComments" class="sr-only">Additional General Comments</label>
+                     <textarea id="additionalComments" name="additionalComments" rows="4" placeholder="Add any other relevant comments or information not covered in the sections above..."></textarea>
+                 </div>
+
+                <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                        <i class="fas fa-save mr-1"></i> Save Draft
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane mr-1"></i> Submit Report
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- Collapsible Section Functionality ---
+        function toggleSection(headerElement) {
+            const section = headerElement.closest('.form-section');
+            const content = section.querySelector('.form-section-content');
+            const toggleIcon = headerElement.querySelector('.toggle-icon');
+
+            if (section.classList.contains('collapsed')) {
+                // Expand section
+                section.classList.remove('collapsed');
+                // Set max-height to the natural height of the content + padding
+                // Use scrollHeight for accurate height calculation
+                content.style.maxHeight = content.scrollHeight + "px";
+                 // Small delay for opacity to match expansion
+                setTimeout(() => { content.style.opacity = 1; }, 50);
+                toggleIcon.classList.add('rotated');
+            } else {
+                // Collapse section
+                content.style.maxHeight = '0px';
+                content.style.opacity = 0;
+                // Wait for transition to finish before adding collapsed class
+                setTimeout(() => { section.classList.add('collapsed'); }, 500); // Match transition duration
+                toggleIcon.classList.remove('rotated');
+            }
+        }
+
+        // --- Dynamic Course Table Functionality ---
+        function addCourseRow(button) {
+            const tableBody = document.getElementById('courseTableBody');
+            const currentRow = button.closest('tr'); // Row where clicked or last row if using general button
+            const newRow = currentRow.cloneNode(true); // Clone the row
+
+            // Clear input/select values in the new row
+            newRow.querySelectorAll('input').forEach(input => input.value = '');
+            const select = newRow.querySelector('select');
+            if (select) select.selectedIndex = 0; // Reset select
+
+            // Change '+' button to '-' button
+            const actionButton = newRow.querySelector('button');
+            actionButton.innerHTML = '<i class="fas fa-minus-circle"></i>';
+            actionButton.classList.remove('btn-add', 'text-blue-600', 'hover:text-blue-800');
+            actionButton.classList.add('btn-remove', 'text-red-600', 'hover:text-red-800');
+            actionButton.onclick = function() { removeCourseRow(this); }; // Assign remove function
+
+            // Insert the new row after the current row
+            currentRow.parentNode.insertBefore(newRow, currentRow.nextSibling);
+
+            // Optional: Focus the first field of the new row
+            const firstInput = newRow.querySelector('select, input');
+            if(firstInput) firstInput.focus();
+        }
+
+        function removeCourseRow(button) {
+            const row = button.closest('tr');
+            const tableBody = row.parentNode;
+            // Prevent deleting the last row if only one exists
+            if (tableBody.querySelectorAll('tr').length > 1) {
+                row.remove(); // Remove the row
+            } else {
+                // Optional: Clear the last row instead of removing it
+                 row.querySelectorAll('input').forEach(input => input.value = '');
+                 const select = row.querySelector('select');
+                 if (select) select.selectedIndex = 0;
+                 alert("Cannot delete the last row. You can modify it or leave it blank if no courses apply.");
+            }
+        }
+
+        // --- Checkbox Description Textarea Functionality ---
+        function setupActivityCheckboxListeners() {
+            document.querySelectorAll('.activity-checkbox').forEach(checkbox => {
+                const container = checkbox.closest('.checkbox-item-container');
+                const descriptionTextarea = container.querySelector('.activity-description-textarea');
+                const otherTextInput = container.querySelector('.other-text-input'); // Specific check for 'Other'
+
+                // Function to show/hide elements based on checkbox state
+                const updateVisibility = () => {
+                    const isChecked = checkbox.checked;
+                    // Show/hide description textarea
+                    if (descriptionTextarea) {
+                        descriptionTextarea.style.display = isChecked ? 'block' : 'none';
+                        descriptionTextarea.required = isChecked; // Make required only if checked
+                        if (!isChecked) descriptionTextarea.value = ''; // Clear if unchecked
+                    }
+                    // Special handling for 'Other' checkbox's text input
+                    if (checkbox.classList.contains('other-checkbox') && otherTextInput) {
+                        otherTextInput.style.display = isChecked ? 'inline-block' : 'none'; // Use inline-block for text input
+                         otherTextInput.style.width = 'auto'; // Adjust width if needed
+                         otherTextInput.style.flexGrow = '1'; // Allow it to grow
+                        otherTextInput.required = isChecked;
+                        if (!isChecked) otherTextInput.value = ''; // Clear if unchecked
+                    }
+                };
+
+                // Initial state on page load
+                updateVisibility();
+
+                // Add listener for changes
+                checkbox.addEventListener('change', updateVisibility);
+            });
+        }
+
+
+        // --- Initialization on Page Load ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Collapse all sections marked initially
+            document.querySelectorAll('.form-section.collapsed .form-section-content').forEach(content => {
+                 content.style.maxHeight = '0px';
+                 content.style.opacity = 0;
+            });
+             document.querySelectorAll('.form-section.collapsed .toggle-icon').forEach(icon => {
+                 icon.classList.remove('rotated');
+            });
+
+            // Set current year as default if empty
+            const yearField = document.getElementById('reportingYear');
+            if (!yearField.value) {
+                yearField.value = new Date().getFullYear();
+            }
+
+            // Setup listeners for activity checkboxes and their textareas
+            setupActivityCheckboxListeners();
+
+            // --- Form Submission Handling (Basic Validation Example) ---
+            const form = document.getElementById('activitiesForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent actual submission for now
+
+                // Basic HTML5 required field check
+                if (!form.checkValidity()) {
+                     // Find the first invalid field and try to focus it or its section
+                    const firstInvalid = form.querySelector(':invalid');
+                    if (firstInvalid) {
+                        const section = firstInvalid.closest('.form-section');
+                        // If it's inside a collapsed section, expand it
+                        if (section && section.classList.contains('collapsed')) {
+                             toggleSection(section.querySelector('.form-section-header'));
+                             // Give a moment for expansion before focusing
+                             setTimeout(() => { firstInvalid.focus(); }, 550);
+                        } else {
+                            firstInvalid.focus();
+                        }
+                    }
+                    alert('Please complete all required fields (*), including descriptions for selected activities.');
+                    form.reportValidity(); // Show browser validation messages
+                    return;
+                }
+
+                // If valid, gather data and submit (simulated)
+                console.log('Form is valid. Gathering data...');
+                const formData = new FormData(form);
+                const data = {};
+
+                // Process FormData, handling arrays and specific description fields
+                 formData.forEach((value, key) => {
+                     if (value.trim() === '') return; // Skip empty fields
+
+                     // Handle course arrays
+                     if (key.endsWith('[]')) {
+                         const cleanKey = key.slice(0, -2);
+                         if (!data[cleanKey]) {
+                             data[cleanKey] = [];
+                         }
+                         data[cleanKey].push(value);
+                     }
+                     // Handle specific activity descriptions (only include if checkbox was checked)
+                     else if (key.endsWith('_desc')) {
+                         // Find the corresponding checkbox ID (assuming convention: section_activity_desc -> #section_activity)
+                         const baseName = key.substring(0, key.lastIndexOf('_desc'));
+                         const checkbox = document.getElementById(baseName.replace(/_/g, '_')); // Heuristic might need adjustment based on actual IDs
+                         // A more robust way: check if the checkbox value exists in formData for that section
+                         const sectionName = key.split('_')[0]; // e.g., 'wellbeing'
+                         const activityValue = formData.get(sectionName + 'Activities[]'); // Get potential value
+                         const otherNameValue = formData.get(sectionName + '_other_name'); // Get other name if exists
+
+                         // Only add description if the activity was selected OR if it's the 'other' description and 'other' was checked
+                         let shouldInclude = false;
+                         if (checkbox && checkbox.checked) {
+                             shouldInclude = true;
+                         } else if (key.includes('_other_desc') && formData.get(sectionName + '_other_name')) {
+                             // Include 'other' description only if the 'other name' field has value
+                             shouldInclude = true;
+                         }
+
+                         if (shouldInclude) {
+                             // Store descriptions in a structured way, e.g., under the activity name
+                             const activityKey = baseName.replace(sectionName + '_', ''); // e.g., wellnessPrograms
+                             if (!data[sectionName + 'Details']) data[sectionName + 'Details'] = {};
+                             data[sectionName + 'Details'][activityKey] = { description: value };
+                             // If it's 'other', also store the specified name
+                             if (activityKey === 'other' && otherNameValue) {
+                                 data[sectionName + 'Details'][activityKey].name = otherNameValue;
+                             }
+                         }
+                     }
+                     // Handle 'other' name fields (captured within the description logic above)
+                     else if (!key.endsWith('_name')) { // Avoid duplicating 'other_name'
+                        data[key] = value;
+                     }
+                 });
+
+
+                console.log('Data to submit:', JSON.stringify(data, null, 2));
+                alert('Report submitted successfully (simulation). Check console for data.');
+
+                // Real submission logic would go here (e.g., using fetch)
+                // fetch('/api/submit-report', { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} })
+                //  .then(...)
+                //  .catch(...);
+            });
+        });
+
+        // --- Save Draft Functionality (Simulated) ---
+        function saveDraft() {
+            // In a real app, this would save data to localStorage or send to a 'save draft' endpoint
+            console.log("Saving draft (simulation)...");
+            const formData = new FormData(document.getElementById('activitiesForm'));
+            const data = {};
+             formData.forEach((value, key) => { data[key] = value }); // Simple conversion for simulation
+            localStorage.setItem('corporateActivityDraft_v2', JSON.stringify(data));
+            alert('Draft saved locally (simulation).');
+            // You could add logic here to load the draft when the page initializes if 'corporateActivityDraft_v2' exists in localStorage
+        }
+
+    </script>
+</body>
+</html>
